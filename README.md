@@ -4,4 +4,14 @@ Inject zygote process by replacing libmemtrack, provide the ability for Riru mod
 
 All other Riru modules requires Riru - Core installed to work.
 
-See https://github.com/RikkaApps/Riru for more details.
+See [https://github.com/RikkaApps/Riru](https://github.com/RikkaApps/Riru) for more details.
+
+### Changelog
+
+#### v19 (21)
+  
+- Always reset module files SELinux in case
+
+#### v19 (20)
+
+- Support Android Q Beta 3 (all modules need to be upgraded)
