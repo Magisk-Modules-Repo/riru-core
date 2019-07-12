@@ -8,6 +8,10 @@ See [https://github.com/RikkaApps/Riru](https://github.com/RikkaApps/Riru) for m
 
 ### Changelog
 
+#### v19.4 (26)
+
+- Fix bug
+
 #### v19.3 (25)
 
 - Fix not work on Android Q Beta 5 (if "process pool" enabled)
