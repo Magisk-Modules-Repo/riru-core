@@ -15,3 +15,8 @@ See [https://github.com/RikkaApps/Riru](https://github.com/RikkaApps/Riru) for m
 #### v19 (20)
 
 - Support Android Q Beta 3 (all modules need to be upgraded)
+
+#### v19.3 (25)
+
+- Follow Android Q Beta 5 changes (the removal of "sandbox")
+- Remove jniRegisterNativeMethods hook when entering the app process
