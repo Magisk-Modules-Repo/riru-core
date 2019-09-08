@@ -8,6 +8,10 @@ See [https://github.com/RikkaApps/Riru](https://github.com/RikkaApps/Riru) for m
 
 ### Changelog
 
+#### v19.5 (27)
+
+- Fix [#58](https://github.com/RikkaApps/Riru/issues/58)
+
 #### v19.4 (26)
 
 - Fix bug
