@@ -10,6 +10,7 @@ See [https://github.com/RikkaApps/Riru](https://github.com/RikkaApps/Riru) for m
 
 ### v19.5 (27)
 
+- Verify important files on install (2019/10/29)
 - Fix [#58](https://github.com/RikkaApps/Riru/issues/58)
 
 ### v19.4 (26)
