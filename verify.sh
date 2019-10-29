@@ -24,7 +24,7 @@
 #
 ##########################################################################################
 
-TMPDIR_FOR_VERIFY=$TMPDIR/.unzip_and_verify
+TMPDIR_FOR_VERIFY=$TMPDIR/.vunzip
 
 abort_verify() {
   ui_print "*********************************************************"

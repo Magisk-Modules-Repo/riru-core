@@ -185,7 +185,7 @@ on_install() {
   ui_print "- Extracting zygote_restart executable"
   mkdir -p "$RIRU_PATH/bin"
   #unzip -j "$ZIPFILE" "zygote_restart_$ARCH" -d "$RIRU_PATH/bin" >&2
-  vunzip -j "$ZIPFILE" "zygote_restart_$ARCH" -d "$RIRU_PATH/bin" >&2
+  vunzip -j "$ZIPFILE" "zygote_restart_$ARCH" -d "$RIRU_PATH/bin"
   mv "$RIRU_PATH/bin/zygote_restart_$ARCH" "$RIRU_PATH/bin/zygote_restart"
   set_perm "$RIRU_PATH/bin/zygote_restart" 0 0 0700 u:object_r:system_file:s0
 
