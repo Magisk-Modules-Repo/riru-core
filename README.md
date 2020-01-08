@@ -8,6 +8,12 @@ See [https://github.com/RikkaApps/Riru](https://github.com/RikkaApps/Riru) for m
 
 ## Changelog
 
+### v19.6 (28)
+
+- Support Samsung Q
+- Copy libmemtrack.so in `post-fs-data.sh`
+- Upgrade to the latest module format
+
 ### v19.5 (27)
 
 - Verify important files on install (2019/10/29)
