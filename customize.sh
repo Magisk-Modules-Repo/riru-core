@@ -1,18 +1,25 @@
 SKIPUNZIP=1
 RIRU_PATH="/data/misc/riru"
 RIRU_API="4"
-RIRU_VERSION_CODE="28"
-RIRU_VERSION_NAME="v19.6"
+RIRU_VERSION_CODE="29"
+RIRU_VERSION_NAME="v19.7"
+
+# check android
+if [[ $API -lt 23 ]]; then
+  abort "! Unsupported sdk: $API"
+else
+  ui_print "- Device sdk: $API"
+fi
 
 # check architecture
-if [[ "$ARCH" != "arm" && "$ARCH" != "arm64" && "$ARCH" != "x86" && "$ARCH" != "x64" ]]; then
+if [ "$ARCH" != "arm" ] && [ "$ARCH" != "arm64" ] && [ "$ARCH" != "x86" ] && [ "$ARCH" != "x64" ]; then
   abort "! Unsupported platform: $ARCH"
 else
   ui_print "- Device platform: $ARCH"
 fi
 
 unzip -o "$ZIPFILE" 'verify.sh' -d "$TMPDIR" >&2
-if [[ ! -f "$TMPDIR/verify.sh" ]]; then
+if [ ! -f "$TMPDIR/verify.sh" ]; then
   ui_print "*********************************************************"
   ui_print "! Unable to extract verify.sh!"
   ui_print "! This zip may be corrupted, please try downloading again"
@@ -26,12 +33,12 @@ extract "$ZIPFILE" 'module.prop' "$MODPATH"
 extract "$ZIPFILE" 'post-fs-data.sh' "$MODPATH"
 extract "$ZIPFILE" 'uninstall.sh' "$MODPATH"
 
-if [[ "$ARCH" == "x86" || "$ARCH" == "x64" ]]; then
+if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then
   ui_print "- Extracting x86 libraries"
   extract "$ZIPFILE" 'system_x86/lib/libmemtrack.so' "$MODPATH"
   mv "$MODPATH/system_x86/lib" "$MODPATH/system/lib"
 
-  if [[ "$IS64BIT" == true ]]; then
+  if [ "$IS64BIT" = true ]; then
     ui_print "- Extracting x64 libraries"
     extract "$ZIPFILE" 'system_x86/lib64/libmemtrack.so' "$MODPATH"
     mv "$MODPATH/system_x86/lib64" "$MODPATH/system/lib64"
@@ -40,7 +47,7 @@ else
   ui_print "- Extracting arm libraries"
   extract "$ZIPFILE" 'system/lib/libmemtrack.so' "$MODPATH"
 
-  if [[ "$IS64BIT" == true ]]; then
+  if [ "$IS64BIT" = true ]; then
     ui_print "- Extracting arm64 libraries"
     extract "$ZIPFILE" 'system/lib64/libmemtrack.so' "$MODPATH"
   fi
