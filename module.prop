@@ -1,6 +1,6 @@
 id=riru-core
-name=Riru - Core
+name=Riru (Riru - Core)
 version=v19.7
 versionCode=29
 author=Rikka
-description=Inject zygote process by replace libmemtrack.so, provide interface to other Riru modules.
+description=Inject zygote process by replacing libmemtrack.so, required by Riru modules (modules which name starts with "Riru").
