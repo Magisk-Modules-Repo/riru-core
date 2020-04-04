@@ -1,8 +1,8 @@
 SKIPUNZIP=1
 RIRU_PATH="/data/misc/riru"
 RIRU_API="4"
-RIRU_VERSION_CODE="29"
-RIRU_VERSION_NAME="v19.7"
+RIRU_VERSION_CODE="30"
+RIRU_VERSION_NAME="v19.8"
 
 # check android
 if [ "$API" -lt 23 ]; then
@@ -36,7 +36,7 @@ extract "$ZIPFILE" 'uninstall.sh' "$MODPATH"
 if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then
   ui_print "- Extracting x86 libraries"
   extract "$ZIPFILE" 'system_x86/lib/libmemtrack.so' "$MODPATH"
-  mv "$MODPATH/system_x86/lib" "$MODPATH/system/lib"
+  mv "$MODPATH/system_x86/" "$MODPATH/system/"
 
   if [ "$IS64BIT" = true ]; then
     ui_print "- Extracting x64 libraries"
@@ -55,8 +55,8 @@ fi
 
 mkdir -p "$RIRU_PATH/modules"
 mkdir -p "$RIRU_PATH/bin"
-set_perm "$RIRU_PATH" 0 0 0700
-set_perm "$RIRU_PATH/modules" 0 0 0700
+set_perm "$RIRU_PATH" 0 1000 0770
+set_perm "$RIRU_PATH/modules" 0 1000 0770
 set_perm "$RIRU_PATH/bin" 0 0 0700
 
 ui_print "- Extracting zygote_restart executable"
