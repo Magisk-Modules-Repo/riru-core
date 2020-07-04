@@ -1,8 +1,8 @@
 SKIPUNZIP=1
 RIRU_PATH="/data/misc/riru"
 RIRU_API="7"
-RIRU_VERSION_CODE="35"
-RIRU_VERSION_NAME="v21.2"
+RIRU_VERSION_CODE="36"
+RIRU_VERSION_NAME="v21.3"
 
 # check android
 if [ "$API" -lt 23 ]; then
