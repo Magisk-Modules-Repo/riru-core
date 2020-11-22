@@ -1,12 +1,26 @@
 SKIPUNZIP=1
-RIRU_PATH="/data/misc/riru"
-RIRU_API="7"
-RIRU_VERSION_CODE="36"
-RIRU_VERSION_NAME="v21.3"
+
+RIRU_PATH="/data/adb/riru"
+RIRU_API="9"
+RIRU_VERSION_CODE="41"
+RIRU_VERSION_NAME="v22.0"
+
+ui_print "- Installing Riru $RIRU_VERSION_NAME ($RIRU_VERSION_CODE, API v$RIRU_API)"
+
+# check Magisk
+ui_print "- Magisk version: $MAGISK_VER ($MAGISK_VER_CODE)"
+if [ "$MAGISK_VER_CODE" -lt 20200 ]; then
+  ui_print "*******************************"
+  ui_print " Riru requires features provided by Magisk v20.2+"
+  ui_print " Please install Magisk v20.2+! "
+  ui_print "*******************************"
+  exit 1
+fi
 
 # check android
 if [ "$API" -lt 23 ]; then
-  abort "! Unsupported sdk: $API"
+  ui_print "! Unsupported sdk: $API"
+  abort "! Minimal supported sdk is 23 (Android 6.0)"
 else
   ui_print "- Device sdk: $API"
 fi
@@ -31,62 +45,64 @@ ui_print "- Extracting Magisk files"
 
 extract "$ZIPFILE" 'module.prop' "$MODPATH"
 extract "$ZIPFILE" 'post-fs-data.sh' "$MODPATH"
+extract "$ZIPFILE" 'service.sh' "$MODPATH"
 extract "$ZIPFILE" 'uninstall.sh' "$MODPATH"
 extract "$ZIPFILE" 'sepolicy.rule' "$MODPATH"
+extract "$ZIPFILE" 'system.prop' "$MODPATH"
 
 if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then
   ui_print "- Extracting x86 libraries"
-  extract "$ZIPFILE" 'system_x86/lib/libmemtrack.so' "$MODPATH"
+  extract "$ZIPFILE" 'system_x86/lib/libriru.so' "$MODPATH"
+  extract "$ZIPFILE" 'system_x86/lib/libriruhide.so' "$MODPATH"
+  extract "$ZIPFILE" 'system_x86/lib/libriruloader.so' "$MODPATH"
   mv "$MODPATH/system_x86/" "$MODPATH/system/"
 
   if [ "$IS64BIT" = true ]; then
     ui_print "- Extracting x64 libraries"
-    extract "$ZIPFILE" 'system_x86/lib64/libmemtrack.so' "$MODPATH"
+    extract "$ZIPFILE" 'system_x86/lib64/libriru.so' "$MODPATH"
+    extract "$ZIPFILE" 'system_x86/lib64/libriruhide.so' "$MODPATH"
+    extract "$ZIPFILE" 'system_x86/lib64/libriruloader.so' "$MODPATH"
     mv "$MODPATH/system_x86/lib64" "$MODPATH/system/lib64"
   fi
 else
   ui_print "- Extracting arm libraries"
-  extract "$ZIPFILE" 'system/lib/libmemtrack.so' "$MODPATH"
+  extract "$ZIPFILE" 'system/lib/libriru.so' "$MODPATH"
+  extract "$ZIPFILE" 'system/lib/libriruhide.so' "$MODPATH"
+  extract "$ZIPFILE" 'system/lib/libriruloader.so' "$MODPATH"
 
   if [ "$IS64BIT" = true ]; then
     ui_print "- Extracting arm64 libraries"
-    extract "$ZIPFILE" 'system/lib64/libmemtrack.so' "$MODPATH"
+    extract "$ZIPFILE" 'system/lib64/libriru.so' "$MODPATH"
+    extract "$ZIPFILE" 'system/lib64/libriruhide.so' "$MODPATH"
+    extract "$ZIPFILE" 'system/lib64/libriruloader.so' "$MODPATH"
   fi
 fi
 
-mkdir -p "$RIRU_PATH/modules"
-mkdir -p "$RIRU_PATH/bin"
-set_perm "$RIRU_PATH" 0 1000 0770
-set_perm "$RIRU_PATH/modules" 0 1000 0770
-set_perm "$RIRU_PATH/bin" 0 0 0700
+# Use magisk_file like other Magisk files
+SECONTEXT="u:object_r:magisk_file:s0"
 
-ui_print "- Extracting zygote_restart executable"
-extract "$ZIPFILE" "zygote_restart/zygote_restart_$ARCH" "$RIRU_PATH/bin" true
-mv "$RIRU_PATH/bin/zygote_restart_$ARCH" "$RIRU_PATH/bin/zygote_restart"
-set_perm "$RIRU_PATH/bin/zygote_restart" 0 0 0700
+ui_print "- Creating Riru path"
+mkdir "$RIRU_PATH"
+set_perm "$RIRU_PATH" 0 0 0700 $SECONTEXT
+mkdir "$RIRU_PATH/bin"
+set_perm "$RIRU_PATH/bin" 0 0 0700 $SECONTEXT
 
+ui_print "- Extracting classes.dex"
+extract "$ZIPFILE" "classes.dex" "$RIRU_PATH/bin"
+mv "$RIRU_PATH/bin/classes.dex" "$RIRU_PATH/bin/rirud.dex"
+set_perm "$RIRU_PATH/bin/rirud.dex" 0 0 0700 $SECONTEXT
+
+# write api version to a persist file, only for the check process of the module installation
 ui_print "- Writing Riru files"
 echo -n "$RIRU_API" > "$RIRU_PATH/api_version.new"
-echo -n "$RIRU_VERSION_NAME" > "$RIRU_PATH/version_name.new"
-echo -n "$RIRU_VERSION_CODE" > "$RIRU_PATH/version_code.new"
-set_perm "$RIRU_PATH/api_version.new" 0 0 0600
-set_perm "$RIRU_PATH/version_name.new" 0 0 0600
-set_perm "$RIRU_PATH/version_code.new" 0 0 0600
-
-# generate a random name
-RANDOM_NAME_FILE="/data/adb/riru/random_name"
-RANDOM_NAME=""
-if [ -f "$RANDOM_NAME_FILE" ]; then
-  RANDOM_NAME=$(cat "$RANDOM_NAME_FILE")
-else
-  while true; do
-    RANDOM_NAME=$(mktemp -u XXXXXXXX)
-    [ -f "/system/lib/lib$RANDOM_NAME.so" ] || break
-  done
-  mkdir "/data/adb/riru"
-  printf "%s" "$RANDOM_NAME" > "$RANDOM_NAME_FILE"
-fi
-ui_print "- Random name is $RANDOM_NAME"
+set_perm "$RIRU_PATH/api_version.new" 0 0 0600 $SECONTEXT
 
 ui_print "- Setting permissions"
 set_perm_recursive "$MODPATH" 0 0 0755 0644
+
+# before Magisk 16e4c67, sepolicy.rule is copied on the second reboot
+if [ "$MAGISK_VER_CODE" -lt 21006 ]; then
+  ui_print "*******************************"
+  ui_print "- Before Magisk v21.1, you will have to manually reboot twice for the first time installation."
+  ui_print "*******************************"
+fi
