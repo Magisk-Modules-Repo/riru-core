@@ -6,6 +6,12 @@ All other Riru modules requires Riru.
 
 See [https://github.com/RikkaApps/Riru](https://github.com/RikkaApps/Riru) for more details.
 
+### Note
+
+If you are use other modules that changes `ro.dalvik.vm.native.bridge`, Riru will not work. (Riru will automatically set it back)
+
+A typical example is, some "optimize" modules changes this property. Since changing this property is meaningless for "optimization", their quality is very questionable. In fact, changing properties for optimization is a joke.
+
 ### Config
 
 * When the file `/data/adb/riru/disable` exists, Riru will do nothing
@@ -13,11 +19,15 @@ See [https://github.com/RikkaApps/Riru](https://github.com/RikkaApps/Riru) for m
 
 ## Changelog
 
+### v23.0 (49) (2020-12-02)
+
+- Add read file & read dir function for "rirud". Modules can use this to read files that zygote itself has no permission to access.
+
 ### v22.4 (46) (2020-11-26)
 
-Magisk's `sepolicy.rule` not work on some device, no one report to Magisk 😒. This version attempts to workaround it.
+Magisk's `sepolicy.rule` does not work on some devices and no one report to Magisk 😒. Versions from 22.1 to 22.4 attempt to workaround it.
 
-- Add a socket run under `u:r:zygote:s0` context that handles all file operations from zygote
+- Add a socket runs under `u:r:zygote:s0 context` to handle all file operations from zygote (Riru)
 - For Magisk < v21.1, reboot twice is no longer required
 
 ### v22.0 (41) (2020-10-09)
