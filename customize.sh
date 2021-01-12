@@ -2,8 +2,8 @@ SKIPUNZIP=1
 
 RIRU_PATH="/data/adb/riru"
 RIRU_API="10"
-RIRU_VERSION_CODE="51"
-RIRU_VERSION_NAME="v23.1"
+RIRU_VERSION_CODE="52"
+RIRU_VERSION_NAME="v23.2"
 # Use magisk_file like other Magisk files
 SECONTEXT="u:object_r:magisk_file:s0"
 
@@ -50,6 +50,7 @@ extract "$ZIPFILE" 'service.sh' "$MODPATH"
 extract "$ZIPFILE" 'uninstall.sh' "$MODPATH"
 extract "$ZIPFILE" 'sepolicy.rule' "$MODPATH"
 extract "$ZIPFILE" 'system.prop' "$MODPATH"
+extract "$ZIPFILE" 'util_functions.sh' "$RIRU_PATH" true
 
 if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then
   ui_print "- Extracting x86 libraries"
@@ -83,13 +84,16 @@ else
   fi
 fi
 
-mv "$RIRU_PATH/bin/librirud.so" "$RIRU_PATH/bin/rirud"
-set_perm "$RIRU_PATH/bin/rirud" 0 0 0700 $SECONTEXT
+ui_print "- Moving rirud"
+rm "$RIRU_PATH/bin/rirud.new"
+mv "$RIRU_PATH/bin/librirud.so" "$RIRU_PATH/bin/rirud.new"
+set_perm "$RIRU_PATH/bin/rirud.new" 0 0 0700 $SECONTEXT
 
-ui_print "- Extracting classes.dex"
+ui_print "- Extracting rirud.dex"
 extract "$ZIPFILE" "classes.dex" "$RIRU_PATH/bin"
-mv "$RIRU_PATH/bin/classes.dex" "$RIRU_PATH/bin/rirud.dex"
-set_perm "$RIRU_PATH/bin/rirud.dex" 0 0 0700 $SECONTEXT
+rm "$RIRU_PATH/bin/rirud.dex.new"
+mv "$RIRU_PATH/bin/classes.dex" "$RIRU_PATH/bin/rirud.dex.new"
+set_perm "$RIRU_PATH/bin/rirud.dex.new" 0 0 0700 $SECONTEXT
 
 # write api version to a persist file, only for the check process of the module installation
 ui_print "- Writing Riru files"

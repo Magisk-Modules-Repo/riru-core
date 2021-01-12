@@ -1,6 +1,6 @@
 id=riru-core
 name=Riru
-version=v23.1
-versionCode=51
+version=v23.2
+versionCode=52
 author=Rikka
 description=Inject into zygote process. Required by all "Riru" modules.
