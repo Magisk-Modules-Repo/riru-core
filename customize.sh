@@ -2,8 +2,8 @@ SKIPUNZIP=1
 
 RIRU_PATH="/data/adb/riru"
 RIRU_API="10"
-RIRU_VERSION_CODE="53"
-RIRU_VERSION_NAME="v23.3"
+RIRU_VERSION_CODE="54"
+RIRU_VERSION_NAME="v23.4"
 # Use magisk_file like other Magisk files
 SECONTEXT="u:object_r:magisk_file:s0"
 
