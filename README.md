@@ -19,6 +19,15 @@ A typical example is, some "optimize" modules changes this property. Since chang
 
 ## Changelog
 
+### v23.5 (55) (2021-02-11)
+
+- Reduce the file size
+- Prevent to be installed from recovery
+
+  Riru requires files in `/data/adb/riru` folder, this folder is created during installation.
+
+  Many TWRP has broken implementations, causing the folder cannot be created, this will finally cause Riru and Riru modules not working.
+
 ### v23.4 (54) (2021-01-23)
 
 - Ensure auto restart works
