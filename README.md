@@ -19,6 +19,11 @@ A typical example is, some "optimize" modules changes this property. Since chang
 
 ## Changelog
 
+### v23.6 (56) (2021-02-21)
+
+- Continue reduce the file size
+- Prevent to be installed from recovery
+
 ### v23.5 (55) (2021-02-11)
 
 - Reduce the file size
