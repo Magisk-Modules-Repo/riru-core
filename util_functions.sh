@@ -1,8 +1,8 @@
 RIRU_PATH="/data/adb/riru"
 RIRU_MIN_COMPATIBLE_API=9
 RIRU_API="10"
-RIRU_VERSION_CODE="58"
-RIRU_VERSION_NAME="v23.8"
+RIRU_VERSION_CODE="59"
+RIRU_VERSION_NAME="v23.9"
 
 abort_for_requires_new_version() {
   ui_print "*********************************************************"
