@@ -1,8 +1,8 @@
 SKIPUNZIP=1
 
 RIRU_API="25"
-RIRU_VERSION_CODE="391"
-RIRU_VERSION_NAME="v25.3.2.r391.a13a1a2"
+RIRU_VERSION_CODE="393"
+RIRU_VERSION_NAME="v25.3.3.r393.ed83041"
 
 if $BOOTMOE; then
   ui_print "- Installing from Magisk app"
