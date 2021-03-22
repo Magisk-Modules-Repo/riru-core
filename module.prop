@@ -1,6 +1,8 @@
 id=riru-core
 name=Riru
-version=v23.9
-versionCode=59
+version=v25.3.2.r391.a13a1a2
+versionCode=391
 author=Rikka
-description=Inject into zygote process. Required by all "Riru" modules.
+description=Inject into zygote and run codes from "Riru" modules in apps or the system server.
+riruApi=25
+riruMinApi=9
