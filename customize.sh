@@ -1,8 +1,8 @@
 SKIPUNZIP=1
 
 RIRU_API="25"
-RIRU_VERSION_CODE="399"
-RIRU_VERSION_NAME="v25.3.4.r399.84f7084"
+RIRU_VERSION_CODE="411"
+RIRU_VERSION_NAME="v25.4.1.r411.22618ad"
 
 if $BOOTMOE; then
   ui_print "- Installing from Magisk app"
@@ -109,7 +109,31 @@ set_perm "$MODPATH/rirud" 0 0 0700
 ui_print "- Extracting rirud.dex"
 extract "$ZIPFILE" "classes.dex" "$MODPATH"
 mv "$MODPATH/classes.dex" "$MODPATH/rirud.dex"
-set_perm "$MODPATH/rirud.dex.new" 0 0 0600
+set_perm "$MODPATH/rirud.dex" 0 0 0600
+
+ui_print "- Checking if your ROM has incorrect SELinux rules"
+/system/bin/app_process -Djava.class.path="$MODPATH/rirud.dex" /system/bin --nice-name=riru_installer riru.Daemon --check-selinux
+
+if [ $? -eq 1 ]; then
+  ui_print "! Your ROM has incorrect SELinux rules"
+  ui_print "! Open detailed explain page in 5s..."
+  sleep 5
+  /system/bin/am start -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d "https://github.com/RikkaApps/Riru/wiki/Explanation-about-incorrect-SELinux-rules-from-third-party-ROMs-cause-Riru-not-working"
+  abort
+fi
+
+if [ -f "/data/adb/modules/riru-core/allow_install_app" ]; then
+  touch $MAGISK_CURRENT_MODULE_PATH/allow_install_app
+  ui_print "- Installing app"
+  extract "$ZIPFILE" "app.apk" "/data/local/tmp"
+  set_perm "/data/local/tmp/app.apk" 2000 1000 0660
+  su 1000 -c '/system/bin/pm install -r /data/local/tmp/app.apk'
+  rm /data/local/tmp/app.apk
+else
+  ui_print "- Skip install app"
+  ui_print "  The app is used to check Riru status and report incorrectly configurations done by your ROM (if you are using third-party ROM)."
+  ui_print "  To allow the module install the app, create a file named /data/adb/modules/riru-core/allow_install_app."
+fi
 
 ui_print "- Removing old files"
 rm -rf /data/adb/riru/bin
