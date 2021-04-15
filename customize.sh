@@ -4,7 +4,7 @@ RIRU_API="25"
 RIRU_VERSION_CODE="411"
 RIRU_VERSION_NAME="v25.4.1.r411.22618ad"
 
-if $BOOTMOE; then
+if $BOOTMODE; then
   ui_print "- Installing from Magisk app"
 else
   ui_print "*********************************************************"
