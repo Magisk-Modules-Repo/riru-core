@@ -1,7 +1,7 @@
 RIRU_MIN_COMPATIBLE_API=9
 RIRU_API="25"
-RIRU_VERSION_CODE="411"
-RIRU_VERSION_NAME="v25.4.1.r411.22618ad"
+RIRU_VERSION_CODE="415"
+RIRU_VERSION_NAME="v25.4.2.r415.f42e9c3"
 
 abort_for_requires_new_version() {
   ui_print "*********************************************************"
@@ -25,7 +25,7 @@ check_riru_version() {
 }
 
 enforce_install_from_magisk_app() {
-  if $BOOTMOE; then
+  if $BOOTMODE; then
     ui_print "- Installing from Magisk app"
   else
     ui_print "*********************************************************"

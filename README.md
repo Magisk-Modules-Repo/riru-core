@@ -18,6 +18,10 @@ Many TWRP has broken implementations, which will finally cause Riru and Riru mod
 
 ## Changelog
 
+### v25.4.2 (2021-04-15)
+
+- "Fix" system server injection does not work on Huawei devices by setting `ro.maple.enable` to `0`
+
 ### v25.4.1 (2021-04-10)
 
 - Report incorrect SELinux rule [1]

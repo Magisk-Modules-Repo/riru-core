@@ -1,10 +1,10 @@
 SKIPUNZIP=1
 
 RIRU_API="25"
-RIRU_VERSION_CODE="411"
-RIRU_VERSION_NAME="v25.4.1.r411.22618ad"
+RIRU_VERSION_CODE="415"
+RIRU_VERSION_NAME="v25.4.2.r415.f42e9c3"
 
-if $BOOTMOE; then
+if $BOOTMODE; then
   ui_print "- Installing from Magisk app"
 else
   ui_print "*********************************************************"
@@ -153,3 +153,10 @@ echo -n "$RIRU_API" >"/data/adb/riru/api_version"
 set_perm "/data/adb/riru/api_version" 0 0 0600
 extract "$ZIPFILE" 'util_functions.sh' "/data/adb/riru"
 set_perm "/data/adb/riru/util_functions.sh" 0 0 0600
+
+# If Huawei's Maple is enabled, system_server is created with a special way which is out of Riru's control
+HUAWEI_MAPLE_ENABLED=$(grep_prop ro.maple.enable)
+if [ $HUAWEI_MAPLE_ENABLED == "1" ]; then
+  ui_print "- Add ro.maple.enable=0"
+  echo "ro.maple.enable=0" >> "$MODPATH/system.prop"
+fi
