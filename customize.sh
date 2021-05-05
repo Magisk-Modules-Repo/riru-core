@@ -1,8 +1,8 @@
 SKIPUNZIP=1
 
 RIRU_API="25"
-RIRU_VERSION_CODE="415"
-RIRU_VERSION_NAME="v25.4.2.r415.f42e9c3"
+RIRU_VERSION_CODE="423"
+RIRU_VERSION_NAME="v25.4.3.r423.420da2f"
 
 if $BOOTMODE; then
   ui_print "- Installing from Magisk app"
@@ -42,6 +42,9 @@ if [ ! -f "$TMPDIR/verify.sh" ]; then
   abort "*********************************************************"
 fi
 . $TMPDIR/verify.sh
+
+extract "$ZIPFILE" 'customize.sh' "$TMPDIR/.vunzip"
+extract "$ZIPFILE" 'verify.sh' "$TMPDIR/.vunzip"
 
 ui_print "- Extracting Magisk files"
 
@@ -127,7 +130,7 @@ if [ -f "/data/adb/modules/riru-core/allow_install_app" ]; then
   ui_print "- Installing app"
   extract "$ZIPFILE" "app.apk" "/data/local/tmp"
   set_perm "/data/local/tmp/app.apk" 2000 1000 0660
-  su 1000 -c '/system/bin/pm install -r /data/local/tmp/app.apk'
+  su -c '/system/bin/pm install -r /data/local/tmp/app.apk'
   rm /data/local/tmp/app.apk
 else
   ui_print "- Skip install app"

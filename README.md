@@ -18,6 +18,11 @@ Many TWRP has broken implementations, which will finally cause Riru and Riru mod
 
 ## Changelog
 
+### v25.4.3 (2021-05-05)
+
+- Exit `service.sh` script
+- Use uid 0 to install app
+
 ### v25.4.2 (2021-04-15)
 
 - "Fix" system server injection does not work on Huawei devices by setting `ro.maple.enable` to `0`

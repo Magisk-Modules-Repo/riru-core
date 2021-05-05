@@ -1,7 +1,7 @@
 RIRU_MIN_COMPATIBLE_API=9
 RIRU_API="25"
-RIRU_VERSION_CODE="415"
-RIRU_VERSION_NAME="v25.4.2.r415.f42e9c3"
+RIRU_VERSION_CODE="423"
+RIRU_VERSION_NAME="v25.4.3.r423.420da2f"
 
 abort_for_requires_new_version() {
   ui_print "*********************************************************"
