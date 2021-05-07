@@ -1,8 +1,8 @@
 SKIPUNZIP=1
 
 RIRU_API="25"
-RIRU_VERSION_CODE="423"
-RIRU_VERSION_NAME="v25.4.3.r423.420da2f"
+RIRU_VERSION_CODE="426"
+RIRU_VERSION_NAME="v25.4.4.r426.05efc94"
 
 if $BOOTMODE; then
   ui_print "- Installing from Magisk app"
@@ -126,7 +126,7 @@ if [ $? -eq 1 ]; then
 fi
 
 if [ -f "/data/adb/modules/riru-core/allow_install_app" ]; then
-  touch $MAGISK_CURRENT_MODULE_PATH/allow_install_app
+  touch $MODPATH/allow_install_app
   ui_print "- Installing app"
   extract "$ZIPFILE" "app.apk" "/data/local/tmp"
   set_perm "/data/local/tmp/app.apk" 2000 1000 0660

@@ -1,7 +1,7 @@
 id=riru-core
 name=Riru
-version=v25.4.3.r423.420da2f
-versionCode=423
+version=v25.4.4.r426.05efc94
+versionCode=426
 author=Rikka
 description=Inject into zygote and run codes from "Riru" modules in apps or the system server.
 riruApi=25
