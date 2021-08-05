@@ -6,6 +6,16 @@ All other Riru modules requires Riru.
 
 See [https://github.com/RikkaApps/Riru](https://github.com/RikkaApps/Riru) for more details.
 
+### Pre-24 modules are no longer supported
+
+> All live modules have upgraded to v24+ for a long time.
+
+The goal is to eliminate bad designs due to historical reasons.
+
+If you are module developer, it only takes you less than 1 min to switch to v24+ if your module is already v22.
+
+For users, if you find you cannot install a module (the installer will say Riru is not installed) or a module stop working, it means that such modules have stop updating for at least 4 months.
+
 ### Note
 
 If you are use other modules that changes `ro.dalvik.vm.native.bridge`, Riru will not work. (Riru will automatically set it back)
@@ -16,7 +26,37 @@ A typical example is, some "optimize" modules changes this property. Since chang
 
 Many TWRP has broken implementations, which will finally cause Riru and Riru modules "installed" but not working.
 
+### Incorrect SELinux rules problem
+
+<https://github.com/RikkaApps/Riru/wiki/Explanation-about-incorrect-SELinux-rules-from-third-party-ROMs-cause-Riru-not-working>
+
 ## Changelog
+
+### v26.0.5 (2021-08-01)
+- Fix killing parent process
+
+### v26.0.4 (2021-07-30)
+- Fix flock not working on some devices
+
+  This is a bug from Magisk's busybox and it will be fixed [here](https://github.com/topjohnwu/ndk-busybox/commit/d75558194ae9c9dfaa21a4e514c91ec6127016f9). As a workaround, we set `SHELL` in the script manually.
+
+### v26.0.3 (2021-07-27)
+
+- Reset SELinux context for module files when necessary
+
+  This will not always work since on ROMs with incorrect SELinux rules, the system will reset module file to the incorrect one at the same time
+
+### v26.0.2 (2021-07-27)
+
+- Report if the SELinux context of the module files are incorrect
+- Use Resources for i18n
+
+### v26.0.1 (2021-07-18)
+
+- Remove support for pre-v24 modules (it has been more than 4 months and all live modules have upgraded to v24+)
+- Display status on module description in Magisk (app is removed because of this)
+- Combine `rirud` with `rirud_java`
+- Refactor codes
 
 ### v25.4.4 (2021-05-07)
 

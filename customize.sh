@@ -1,8 +1,8 @@
 SKIPUNZIP=1
 
-RIRU_API="25"
-RIRU_VERSION_CODE="426"
-RIRU_VERSION_NAME="v25.4.4.r426.05efc94"
+RIRU_API="26"
+RIRU_VERSION_CODE="484"
+RIRU_VERSION_NAME="v26.0.5.r484.a8c93a12f8"
 
 if $BOOTMODE; then
   ui_print "- Installing from Magisk app"
@@ -59,6 +59,7 @@ extract "$ZIPFILE" 'post-fs-data.sh' "$MODPATH"
 extract "$ZIPFILE" 'service.sh' "$MODPATH"
 extract "$ZIPFILE" 'system.prop' "$MODPATH"
 extract "$ZIPFILE" 'util_functions.sh' "$MODPATH"
+extract "$ZIPFILE" 'uninstall.sh' "$MODPATH"
 
 mkdir $MAGISK_CURRENT_MODULE_PATH
 rm "$MAGISK_CURRENT_MODULE_PATH"/util_functions.sh
@@ -81,9 +82,6 @@ if [ "$ARCH" = "x86" ] || [ "$ARCH" = "x64" ]; then
     extract "$ZIPFILE" 'lib/x86_64/libriru.so' "$MODPATH/lib64" true
     extract "$ZIPFILE" 'lib/x86_64/libriruhide.so' "$MODPATH/lib64" true
     extract "$ZIPFILE" 'lib/x86_64/libriruloader.so' "$MODPATH/system/lib64" true
-    extract "$ZIPFILE" 'lib/x86_64/librirud.so' "$MODPATH" true
-  else
-    extract "$ZIPFILE" 'lib/x86/librirud.so' "$MODPATH" true
   fi
 else
   ui_print "- Extracting arm libraries"
@@ -96,47 +94,18 @@ else
     extract "$ZIPFILE" 'lib/arm64-v8a/libriru.so' "$MODPATH/lib64" true
     extract "$ZIPFILE" 'lib/arm64-v8a/libriruhide.so' "$MODPATH/lib64" true
     extract "$ZIPFILE" 'lib/arm64-v8a/libriruloader.so' "$MODPATH/system/lib64" true
-    extract "$ZIPFILE" 'lib/arm64-v8a/librirud.so' "$MODPATH" true
-  else
-    extract "$ZIPFILE" 'lib/armeabi-v7a/librirud.so' "$MODPATH" true
   fi
 fi
 
 ui_print "- Setting permissions"
 set_perm_recursive "$MODPATH" 0 0 0755 0644
 
-ui_print "- Moving rirud"
-mv "$MODPATH/librirud.so" "$MODPATH/rirud"
-set_perm "$MODPATH/rirud" 0 0 0700
-
-ui_print "- Extracting rirud.dex"
-extract "$ZIPFILE" "classes.dex" "$MODPATH"
-mv "$MODPATH/classes.dex" "$MODPATH/rirud.dex"
-set_perm "$MODPATH/rirud.dex" 0 0 0600
+ui_print "- Extracting rirud"
+extract "$ZIPFILE" "rirud.apk" "$MODPATH"
+set_perm "$MODPATH/rirud.apk" 0 0 0600
 
 ui_print "- Checking if your ROM has incorrect SELinux rules"
-/system/bin/app_process -Djava.class.path="$MODPATH/rirud.dex" /system/bin --nice-name=riru_installer riru.Daemon --check-selinux
-
-if [ $? -eq 1 ]; then
-  ui_print "! Your ROM has incorrect SELinux rules"
-  ui_print "! Open detailed explain page in 5s..."
-  sleep 5
-  /system/bin/am start -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d "https://github.com/RikkaApps/Riru/wiki/Explanation-about-incorrect-SELinux-rules-from-third-party-ROMs-cause-Riru-not-working"
-  abort
-fi
-
-if [ -f "/data/adb/modules/riru-core/allow_install_app" ]; then
-  touch $MODPATH/allow_install_app
-  ui_print "- Installing app"
-  extract "$ZIPFILE" "app.apk" "/data/local/tmp"
-  set_perm "/data/local/tmp/app.apk" 2000 1000 0660
-  su -c '/system/bin/pm install -r /data/local/tmp/app.apk'
-  rm /data/local/tmp/app.apk
-else
-  ui_print "- Skip install app"
-  ui_print "  The app is used to check Riru status and report incorrectly configurations done by your ROM (if you are using third-party ROM)."
-  ui_print "  To allow the module install the app, create a file named /data/adb/modules/riru-core/allow_install_app."
-fi
+/system/bin/app_process -Djava.class.path="$MODPATH/rirud.apk" /system/bin --nice-name=riru_installer riru.Installer --check-selinux
 
 ui_print "- Removing old files"
 rm -rf /data/adb/riru/bin
@@ -145,17 +114,11 @@ rm /data/adb/riru/api_version.new
 rm /data/adb/riru/version_code.new
 rm /data/adb/riru/version_name.new
 rm /data/adb/riru/enable_hide
+rm /data/adb/riru/api_version
+rm /data/adb/riru/util_functions.sh
 rm /data/misc/riru/api_version
 rm /data/misc/riru/version_code
 rm /data/misc/riru/version_name
-
-# Support for pre-v24 modules
-ui_print "- Writing files for pre-v24 modules"
-mkdir /data/adb/riru
-echo -n "$RIRU_API" >"/data/adb/riru/api_version"
-set_perm "/data/adb/riru/api_version" 0 0 0600
-extract "$ZIPFILE" 'util_functions.sh' "/data/adb/riru"
-set_perm "/data/adb/riru/util_functions.sh" 0 0 0600
 
 # If Huawei's Maple is enabled, system_server is created with a special way which is out of Riru's control
 HUAWEI_MAPLE_ENABLED=$(grep_prop ro.maple.enable)
