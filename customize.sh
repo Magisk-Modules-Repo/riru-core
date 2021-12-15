@@ -1,8 +1,8 @@
 SKIPUNZIP=1
 
 RIRU_API="26"
-RIRU_VERSION_CODE="513"
-RIRU_VERSION_NAME="v26.1.3.r513.8e95115fd4"
+RIRU_VERSION_CODE="522"
+RIRU_VERSION_NAME="v26.1.4.r522.8b379cedb5"
 
 if $BOOTMODE; then
   ui_print "- Installing from Magisk app"
@@ -55,6 +55,7 @@ else
 fi
 
 extract "$ZIPFILE" 'module.prop' "$MODPATH"
+cp "$MODPATH/module.prop" "$MODPATH/module.prop.bk"
 extract "$ZIPFILE" 'post-fs-data.sh' "$MODPATH"
 extract "$ZIPFILE" 'service.sh' "$MODPATH"
 extract "$ZIPFILE" 'system.prop' "$MODPATH"
